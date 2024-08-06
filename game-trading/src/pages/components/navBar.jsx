@@ -36,6 +36,7 @@ function Navbar() {
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({
           email: loginEmail,
           password: loginPassword
@@ -55,6 +56,49 @@ function Navbar() {
       console.error('Login error:', error);
     };
   };
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/logout', {
+        method: 'POST',
+        credentials: 'include'
+        });
+        if (response.ok) {
+          console.log('Logout success');
+          setIsLoggedIn(false);
+        } else {
+          console.log('Logout failed');
+        } 
+      } catch (error) {
+        console.error('Logout error:', error
+      )
+    }
+  };
+
+  const checkAuth = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/check-auth', {
+        method: 'GET',
+        credentials: 'include' // Include cookies in the request
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log('User is authenticated:', data);
+        setIsLoggedIn(true);
+        setUser({ id: data.userId });
+      } else {
+        console.log('User is not authenticated');
+        setIsLoggedIn(false);
+      }
+    } catch (error) {
+      console.error('Auth check error:', error);
+      setIsLoggedIn(false);
+    }
+  };
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
   const handleRegister = async () => {
     console.log('Register email:', registerEmail);
@@ -129,7 +173,7 @@ function Navbar() {
                           <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Earnings</a>
                         </li>
                         <li>
-                          <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" onClick={() =>setIsLoggedIn(false)}>Sign out</a>
+                          <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" onClick={() => handleLogout()}>Sign out</a>
                         </li>
                       </ul>
                     </div>
