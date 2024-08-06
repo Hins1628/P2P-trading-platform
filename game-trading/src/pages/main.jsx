@@ -3,12 +3,51 @@ import { Link } from 'react-router-dom'
 import '../App.css'
 import Navbar from './components/navBar';
 import Footer from './components/footer';
+import ProductList from './components/productList';
 
 function Main() {
+  const products = [
+    {
+      image: '/src/assets/img/sample1.png',
+      name: 'CSGO2',
+      description: 'Gamma Doppler Flip Knife',
+      phase: 'Phase 2',
+      price: 4500,
+      sellerIcon: '/src/assets/img/icon.png',
+      sellerName: 'Hins866'
+    },
+    {
+      image: '/src/assets/img/sample2.png',
+      name: 'CSGO3',
+      description: 'Crimson Web Karambit',
+      phase: 'Phase 1',
+      price: 5000,
+      sellerIcon: '/src/assets/img/icon.png',
+      sellerName: 'JohnDoe'
+    },
+    {
+      image: '/src/assets/img/sample2.png',
+      name: 'CSGO3',
+      description: 'Crimson Web Karambit',
+      phase: 'Phase 1',
+      price: 5000,
+      sellerIcon: '/src/assets/img/icon.png',
+      sellerName: 'JohnDoe'
+    },
+    {
+      image: '/src/assets/img/sample2.png',
+      name: 'CSGO3',
+      description: 'Crimson Web Karambit',
+      phase: 'Phase 1',
+      price: 5000,
+      sellerIcon: '/src/assets/img/icon.png',
+      sellerName: 'JohnDoe'
+    }];
+
   return (
     <>
       <Navbar />
-      <section className="bg-center bg-cover bg-[url('/src/assets/img/sample_wall_1.png')] bg-gray-700 bg-blend-multiply">
+      <section className="bg-center bg-cover bg-[url('/src/assets/img/1.jpg')] bg-gray-700 bg-blend-multiply">
         <div className="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
           <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-white md:text-5xl lg:text-6xl">This is the new P2P trading platform.</h1>
           <p className="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">In here, every player can trade their gaming item with no fee.</p>
@@ -26,158 +65,15 @@ function Main() {
         </div>
       </section>
 
+
+
       <section className="bg-center bg-no-repeat bg-gray-200 bg-blend-multiply">
         <div className="px-4 mx-auto max-w-screen-xl text-left py-12 lg:py-27">
           <p>Hot Online Game</p>
-          <div className="flex flex-col items-center m-8 md:flex-row">
-            <Link to="/Product">
-              <div role="status" className="max-w-sm p-4 border border-gray-200 rounded shadow md:p-6 dark:border-gray-700 mx-4">
-                <div className="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded">
-                  <img className="bg-center bg-cover" src="/src/assets/img/sample1.png" ></img>
-                </div>
-                <div className="h-2.5 w-48 mb-4 ">CSGO2</div>
-                <div className="h-2 mb-2.5 ">Gamma Doppler Flip Knife</div>
-                <div className="h-2 mb-2.5 ">Phase 2</div>
-                <div className="h-2 text-orange-400">$ 4500</div>
-                <div className="flex items-center mt-4">
-                  <img src="/src/assets/img/icon.png" className="max-w-none h-10 me-3"></img>
-                  <div>
-                    <div className="h-2.5  w-32 mb-2">Selling</div>
-                    <div className="w-48 h-2 ">Hins866</div>
-                  </div>
-                </div>
-                <span className="sr-only">Loading...</span>
-              </div>
-            </Link>
-            <div role="status" className="max-w-sm p-4 border border-gray-200 rounded shadow md:p-6 dark:border-gray-700 mx-4">
-              <div className="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded">
-                <img className="bg-center bg-cover" src="/src/assets/img/sample1.png" ></img>
-              </div>
-              <div className="h-2.5 w-48 mb-4 ">CSGO2</div>
-              <div className="h-2 mb-2.5 ">Gamma Doppler Flip Knife</div>
-              <div className="h-2 mb-2.5 ">Phase 2</div>
-              <div className="h-2 text-orange-400">$ 4500</div>
-              <div className="flex items-center mt-4">
-                <img src="/src/assets/img/icon.png" className="max-w-none h-10 me-3"></img>
-                <div>
-                  <div className="h-2.5  w-32 mb-2">Selling</div>
-                  <div className="w-48 h-2 ">Hins866</div>
-                </div>
-              </div>
-              <span className="sr-only">Loading...</span>
-            </div>
-
-            <div role="status" className="max-w-sm p-4 border border-gray-200 rounded shadow md:p-6 dark:border-gray-700 mx-4">
-              <div className="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded">
-                <img className="bg-center bg-cover" src="/src/assets/img/sample1.png" ></img>
-              </div>
-              <div className="h-2.5 w-48 mb-4 ">CSGO2</div>
-              <div className="h-2 mb-2.5 ">Gamma Doppler Flip Knife</div>
-              <div className="h-2 mb-2.5 ">Phase 2</div>
-              <div className="h-2 text-orange-400">$ 4500</div>
-              <div className="flex items-center mt-4">
-                <img src="/src/assets/img/icon.png" className="max-w-none h-10 me-3"></img>
-                <div>
-                  <div className="h-2.5  w-32 mb-2">Selling</div>
-                  <div className="w-48 h-2 ">Hins866</div>
-                </div>
-              </div>
-              <span className="sr-only">Loading...</span>
-            </div>
-
-            <div role="status" className="max-w-sm p-4 border border-gray-200 rounded shadow md:p-6 dark:border-gray-700 mx-4">
-              <div className="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded">
-                <img className="bg-center bg-cover" src="/src/assets/img/sample1.png" ></img>
-              </div>
-              <div className="h-2.5 w-48 mb-4 ">CSGO2</div>
-              <div className="h-2 mb-2.5 ">Gamma Doppler Flip Knife</div>
-              <div className="h-2 mb-2.5 ">Phase 2</div>
-              <div className="h-2 text-orange-400">$ 4500</div>
-              <div className="flex items-center mt-4">
-                <img src="/src/assets/img/icon.png" className="max-w-none h-10 me-3"></img>
-                <div>
-                  <div className="h-2.5  w-32 mb-2">Selling</div>
-                  <div className="w-48 h-2 ">Hins866</div>
-                </div>
-              </div>
-              <span className="sr-only">Loading...</span>
-            </div>
-          </div>
+          <ProductList products={products} />
 
           <p>Hot Mobile Game</p>
-          <div className="flex flex-col items-center m-8 md:flex-row">
-            <div role="status" className="max-w-sm p-4 border border-gray-200 rounded shadow md:p-6 dark:border-gray-700 mx-4">
-              <div className="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded">
-                <img className="bg-center bg-cover" src="/src/assets/img/sample1.png" ></img>
-              </div>
-              <div className="h-2.5 w-48 mb-4 ">CSGO2</div>
-              <div className="h-2 mb-2.5 ">Gamma Doppler Flip Knife</div>
-              <div className="h-2 mb-2.5 ">Phase 2</div>
-              <div className="h-2 text-orange-400">$ 4500</div>
-              <div className="flex items-center mt-4">
-                <img src="/src/assets/img/icon.png" className="max-w-none h-10 me-3"></img>
-                <div>
-                  <div className="h-2.5  w-32 mb-2">Selling</div>
-                  <div className="w-48 h-2 ">Hins866</div>
-                </div>
-              </div>
-              <span className="sr-only">Loading...</span>
-            </div>
-
-            <div role="status" className="max-w-sm p-4 border border-gray-200 rounded shadow md:p-6 dark:border-gray-700 mx-4">
-              <div className="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded">
-                <img className="bg-center bg-cover" src="/src/assets/img/sample1.png" ></img>
-              </div>
-              <div className="h-2.5 w-48 mb-4 ">CSGO2</div>
-              <div className="h-2 mb-2.5 ">Gamma Doppler Flip Knife</div>
-              <div className="h-2 mb-2.5 ">Phase 2</div>
-              <div className="h-2 text-orange-400">$ 4500</div>
-              <div className="flex items-center mt-4">
-                <img src="/src/assets/img/icon.png" className="max-w-none h-10 me-3"></img>
-                <div>
-                  <div className="h-2.5  w-32 mb-2">Selling</div>
-                  <div className="w-48 h-2 ">Hins866</div>
-                </div>
-              </div>
-              <span className="sr-only">Loading...</span>
-            </div>
-
-            <div role="status" className="max-w-sm p-4 border border-gray-200 rounded shadow md:p-6 dark:border-gray-700 mx-4">
-              <div className="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded">
-                <img className="bg-center bg-cover" src="/src/assets/img/sample1.png" ></img>
-              </div>
-              <div className="h-2.5 w-48 mb-4 ">CSGO2</div>
-              <div className="h-2 mb-2.5 ">Gamma Doppler Flip Knife</div>
-              <div className="h-2 mb-2.5 ">Phase 2</div>
-              <div className="h-2 text-orange-400">$ 4500</div>
-              <div className="flex items-center mt-4">
-                <img src="/src/assets/img/icon.png" className="max-w-none h-10 me-3"></img>
-                <div>
-                  <div className="h-2.5  w-32 mb-2">Selling</div>
-                  <div className="w-48 h-2 ">Hins866</div>
-                </div>
-              </div>
-              <span className="sr-only">Loading...</span>
-            </div>
-
-            <div role="status" className="max-w-sm p-4 border border-gray-200 rounded shadow md:p-6 dark:border-gray-700 mx-4">
-              <div className="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded">
-                <img className="bg-center bg-cover" src="/src/assets/img/sample1.png" ></img>
-              </div>
-              <div className="h-2.5 w-48 mb-4 ">CSGO2</div>
-              <div className="h-2 mb-2.5 ">Gamma Doppler Flip Knife</div>
-              <div className="h-2 mb-2.5 ">Phase 2</div>
-              <div className="h-2 text-orange-400">$ 4500</div>
-              <div className="flex items-center mt-4">
-                <img src="/src/assets/img/icon.png" className="max-w-none h-10 me-3"></img>
-                <div>
-                  <div className="h-2.5  w-32 mb-2">Selling</div>
-                  <div className="w-48 h-2 ">Hins866</div>
-                </div>
-              </div>
-              <span className="sr-only">Loading...</span>
-            </div>
-          </div>
+          <ProductList products={products}/>
         </div>
       </section>
 

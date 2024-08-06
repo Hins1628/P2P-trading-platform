@@ -83,7 +83,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className="bg-gradient-to-r from-purple-500 to-pink-500 bg-gray-300 bg-blend-multiply">
+      <nav className="">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <div className='flex flex-row gap-10'>
             <Link to="/Main" className="flex items-center space-x-3">
@@ -110,7 +110,7 @@ function Navbar() {
                 <div className="relative flex md:order-2 space-x-3 md:space-x-0">
                   <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" onMouseEnter={() => setIsUserMenuOpen(true)} onMouseLeave={() => setIsUserMenuOpen(false)}>
                     <span className="sr-only">Open user menu</span>
-                    <img className="w-8 h-8 rounded-full" src="https://via.placeholder.com/200" alt="Guest user photo" />
+                    <img className="w-8 h-8 rounded-full object-cover" src="/src/assets/img/1.jpg" alt="Guest user photo" />
                   </button>
                   {isUserMenuOpen && (
                     <div className="absolute z-50 mt-8 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown" onMouseEnter={() => setIsUserMenuOpen(true)} onMouseLeave={() => setIsUserMenuOpen(false)}>
