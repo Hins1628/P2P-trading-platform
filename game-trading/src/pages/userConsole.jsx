@@ -9,7 +9,7 @@ import UserProducts from './components/consoleComponents/userProducts'
 
 function UserConsole() {
 
-    const [currentPage, setCurrentPage] = useState('dashboard')
+    const [currentPage, setCurrentPage] = useState('profile')
 
     return (
         <div>

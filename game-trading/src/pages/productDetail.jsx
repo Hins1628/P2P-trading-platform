@@ -1,13 +1,53 @@
 import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import '../App.css'
 import Navbar from './components/navBar'
 import Footer from './components/footer'
 
 
-function Product() {
-    const path = "Electronics";
-    const product = "Laptop";
+function ProductDetail() {
+    const { productId } = useParams();
+    const [product, setProduct] = useState({});
+
+    const fetchProduct = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/get-product/${productId}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Product:', data);
+                setProduct(data);
+            } else {
+                console.log('Product not found');
+            }
+        } catch (error) {
+            console.error('Product error:', error);
+        }
+    };
+
+    const updateProductViews = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/update-product-views/${productId}`, {
+                method: 'PUT',
+                credentials: 'include'
+            });
+            if (response.ok) {
+                console.log('Product views updated');
+            } else {
+                console.log('Product views not updated');
+            }
+        } catch (error) {
+            console.error('Product views error:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchProduct();
+        updateProductViews();
+    }, []);
 
     const [mainImage, setMainImage] = useState("https://via.placeholder.com/300");
     const images = [
@@ -29,16 +69,16 @@ function Product() {
         <div>
             <Navbar />
             <div className="bg-white p-6 rounded-lg shadow-md max-w-screen-xl mx-auto">
-                <p className="text-sm text-gray-500 mb-4">{`Home > ${path} > ${product}`}</p>
+                <p className="text-sm text-gray-500 mb-4">{`Home > ${product.productType} > ${product.name}`}</p>
                 <div className='flex flex-row space-x-4'>
                     <div className="flex-grow justify-center">
-                        <img className="w-[500px] h-auto object-cover" src={mainImage} alt="Main product" />
+                        <img className="w-[500px] h-auto object-cover" src={`http://localhost:5000/uploads/${product.images}`} alt="Main product" />
                         <div className='flex flex-row space-x-2 mt-4'>
                             {images.map((image, index) => (
                                 <img
                                     key={index}
                                     className="w-16 h-16 object-cover cursor-pointer"
-                                    src={image}
+                                    src={`http://localhost:5000/uploads/${product.images}`}
                                     alt="Sub Product"
                                     onClick={() => setMainImage(image)}
                                 />
@@ -48,11 +88,11 @@ function Product() {
                         </div>
                     </div>
                     <div className="flex-grow space-y-5">
-                        <h1 className="text-4xl font-extrabold mb-4">{productName}</h1>
-                        <p className="text-gray-500 mb-2 text-sm">{briefDescription}</p>
-                        <p className='text-gray-500'>Views {views}</p>
+                        <h1 className="text-4xl font-extrabold mb-4">{product.name}</h1>
+                        <p className="text-gray-500 mb-2 text-sm">{product.productStatus}</p>
+                        <p className='text-gray-500'>Views: {product.views}</p>
                         <p className="text-lg font-semibold mb-4">
-                            <span className="text-gray-500 line-through mr-2">{originalPrice}</span>
+                            <span className="text-gray-500 line-through mr-2">{product.price}</span>
                             <span className="text-red-500">{currentPrice}</span>
                             <span className="text-green-500 ml-2">-{discount}</span>
                         </p>
@@ -62,7 +102,7 @@ function Product() {
                                 <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button">
                                     <img className="w-8 h-8 rounded-full" src="https://via.placeholder.com/200" alt="Guest user photo" />
                                 </button>
-                                <div>seller name</div>
+                                <div>{product.sellerName}</div>
                             </div>
                             <div className="flex items-center">
                                 <svg className="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
@@ -82,7 +122,7 @@ function Product() {
                 </div>
                 <div className="mt-8">
                     <h1 className="text-xl font-bold mb-2">Details</h1>
-                    <p className="text-gray-500">{details}</p>
+                    <p className="text-gray-500">{product.description}</p>
                 </div>
             </div>
             <Footer />
@@ -90,4 +130,4 @@ function Product() {
     )
 }
 
-export default Product;
+export default ProductDetail;

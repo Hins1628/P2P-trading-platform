@@ -6,43 +6,30 @@ import Footer from './components/footer';
 import ProductList from './components/productList';
 
 function Main() {
-  const products = [
-    {
-      image: '/src/assets/img/sample1.png',
-      name: 'CSGO2',
-      description: 'Gamma Doppler Flip Knife',
-      phase: 'Phase 2',
-      price: 4500,
-      sellerIcon: '/src/assets/img/icon.png',
-      sellerName: 'Hins866'
-    },
-    {
-      image: '/src/assets/img/sample2.png',
-      name: 'CSGO3',
-      description: 'Crimson Web Karambit',
-      phase: 'Phase 1',
-      price: 5000,
-      sellerIcon: '/src/assets/img/icon.png',
-      sellerName: 'JohnDoe'
-    },
-    {
-      image: '/src/assets/img/sample2.png',
-      name: 'CSGO3',
-      description: 'Crimson Web Karambit',
-      phase: 'Phase 1',
-      price: 5000,
-      sellerIcon: '/src/assets/img/icon.png',
-      sellerName: 'JohnDoe'
-    },
-    {
-      image: '/src/assets/img/sample2.png',
-      name: 'CSGO3',
-      description: 'Crimson Web Karambit',
-      phase: 'Phase 1',
-      price: 5000,
-      sellerIcon: '/src/assets/img/icon.png',
-      sellerName: 'JohnDoe'
-    }];
+
+  const [products, setProducts] = useState([]);
+
+  const getProducts = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/get-products-List', {
+        method: 'GET',
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Products:', data);
+        setProducts(data);
+      } else {
+        console.log('Products not found');
+      }
+    } catch (error) {
+      console.error('Products error:', error);
+    }
+  }
+
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   return (
     <>
@@ -73,7 +60,7 @@ function Main() {
           <ProductList products={products} />
 
           <p>Hot Mobile Game</p>
-          <ProductList products={products}/>
+          <ProductList products={products} />
         </div>
       </section>
 

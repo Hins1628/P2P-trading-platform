@@ -173,7 +173,7 @@ function Navbar() {
                 <div className="relative flex md:order-2 space-x-3 md:space-x-0">
                   <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" onMouseEnter={() => setIsUserMenuOpen(true)} onMouseLeave={() => setIsUserMenuOpen(false)}>
                     <span className="sr-only">Open user menu</span>
-                    <img className="w-8 h-8 rounded-full object-cover" src="/src/assets/img/1.jpg" alt="Guest user photo" />
+                    <img className="w-8 h-8 rounded-full object-cover" src={`http://localhost:5000/uploads/${user.icon}`} alt="Guest user photo" />
                   </button>
                   {isUserMenuOpen && (
                     <div className="absolute z-50 mt-8 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown" onMouseEnter={() => setIsUserMenuOpen(true)} onMouseLeave={() => setIsUserMenuOpen(false)}>
@@ -183,13 +183,13 @@ function Navbar() {
                       </div>
                       <ul className="py-2" aria-labelledby="user-menu-button">
                         <li>
-                          <Link to="/UserConsole" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Dashboard</Link>
+                          <Link to="/UserConsole" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profile</Link>
                         </li>
                         <li>
-                          <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Settings</a>
+                          <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Product</a>
                         </li>
                         <li>
-                          <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Earnings</a>
+                          <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Setting</a>
                         </li>
                         <li>
                           <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" onClick={() => handleLogout()}>Sign out</a>
