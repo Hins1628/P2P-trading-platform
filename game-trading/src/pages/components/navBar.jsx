@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-const getCurrentUser = () => ({ name: 'John Doe' });
-
 function Navbar() {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,10 +8,11 @@ function Navbar() {
   const [isLogin, setIsLogin] = useState(true);
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [registerName, setRegisterName] = useState('');
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(getCurrentUser());
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     const checkWindowSize = () => {
@@ -47,7 +46,7 @@ function Navbar() {
         console.log('Login password:', loginPassword);
         console.log('Login success');
         setIsLoggedIn(true);
-        setUser({ name: loginEmail });
+        getUserInfo();
         setIsModalOpen(false);
       } else {
         console.log('Login failed');
@@ -62,15 +61,15 @@ function Navbar() {
       const response = await fetch('http://localhost:5000/logout', {
         method: 'POST',
         credentials: 'include'
-        });
-        if (response.ok) {
-          console.log('Logout success');
-          setIsLoggedIn(false);
-        } else {
-          console.log('Logout failed');
-        } 
-      } catch (error) {
-        console.error('Logout error:', error
+      });
+      if (response.ok) {
+        console.log('Logout success');
+        setIsLoggedIn(false);
+      } else {
+        console.log('Logout failed');
+      }
+    } catch (error) {
+      console.error('Logout error:', error
       )
     }
   };
@@ -96,12 +95,31 @@ function Navbar() {
     }
   };
 
+  const getUserInfo = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/get-user-info', {
+        method: 'GET',
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log('User info:', data);
+        setUser(data);
+      } else {
+        console.log('User info not found');
+      }
+    } catch (error) {
+      console.error('User info error:', error);
+    }
+  };
+
   useEffect(() => {
     checkAuth();
+    getUserInfo();
   }, []);
 
   const handleRegister = async () => {
-    console.log('Register email:', registerEmail);
+    console.log('Register email:', registerName);
     try {
       const response = await fetch('http://localhost:5000/register', {
         method: 'POST',
@@ -109,6 +127,7 @@ function Navbar() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+          name: registerName,
           email: registerEmail,
           password: registerPassword
         })
@@ -159,8 +178,8 @@ function Navbar() {
                   {isUserMenuOpen && (
                     <div className="absolute z-50 mt-8 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown" onMouseEnter={() => setIsUserMenuOpen(true)} onMouseLeave={() => setIsUserMenuOpen(false)}>
                       <div className="px-4 py-3">
-                        <span className="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
-                        <span className="block text-sm text-gray-500 truncate dark:text-gray-400">{user.name}</span>
+                        <span className="block text-sm text-gray-900 dark:text-white">{user.name}</span>
+                        <span className="block text-sm text-gray-500 truncate dark:text-gray-400">{user.email}</span>
                       </div>
                       <ul className="py-2" aria-labelledby="user-menu-button">
                         <li>
@@ -248,11 +267,15 @@ function Navbar() {
                   handleRegister();
                 }}>
                   <div>
-                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Register email</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Name</label>
+                    <input type="userName" name="userName" id="userName" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Your Name" value={registerName} required onChange={event => setRegisterName(event.target.value)} />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Register Email</label>
                     <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@gmail.com" value={registerEmail} required onChange={event => setRegisterEmail(event.target.value)} />
                   </div>
                   <div>
-                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Register password</label>
+                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Register Password</label>
                     <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" value={registerPassword} required onChange={event => setRegisterPassword(event.target.value)} />
                   </div>
                   <div className="flex justify-between">
