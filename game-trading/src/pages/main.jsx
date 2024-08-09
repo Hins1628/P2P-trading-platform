@@ -6,8 +6,9 @@ import Footer from './components/footer';
 import ProductList from './components/productList';
 
 function Main() {
-
   const [products, setProducts] = useState([]);
+  const [menClothesproducts, setMenClothesProducts] = useState([]);
+  const [womenClothesproducts, setWomenClothesProducts] = useState([]);
 
   const getProducts = async () => {
     try {
@@ -19,6 +20,12 @@ function Main() {
         const data = await response.json();
         console.log('Products:', data);
         setProducts(data);
+        const menClothes = data.filter(product => product.productType === "Men's Clothes");
+        const womenClothes = data.filter(product => product.productType === "Women's Clothes");
+
+        setMenClothesProducts(menClothes);
+        setWomenClothesProducts(womenClothes);
+        console.log(menClothes, womenClothes);
       } else {
         console.log('Products not found');
       }
@@ -56,11 +63,11 @@ function Main() {
 
       <section className="bg-center bg-no-repeat bg-gray-200 bg-blend-multiply">
         <div className="px-4 mx-auto max-w-screen-xl text-left py-12 lg:py-27">
-          <p>Hot Online Game</p>
-          <ProductList products={products} />
+          <p>Hot Men's Clothes</p>
+          <ProductList products={menClothesproducts} />
 
-          <p>Hot Mobile Game</p>
-          <ProductList products={products} />
+          <p>Hot Woman's Clothes</p>
+          <ProductList products={womenClothesproducts} />
         </div>
       </section>
 

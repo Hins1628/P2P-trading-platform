@@ -343,3 +343,15 @@ app.get('/get-seller-icon/:sellerId', async (req, res) => {
         res.status(500).send('Seller icon not found');
     }
 });
+
+app.get('/get-seller-info/:sellerId', async (req, res) => {
+    const sellerId = req.params.sellerId;
+    try {
+        const seller = await User.findOne({ userId: sellerId });
+        const sellerProducts = await Products.find({ sellerId });
+        res.status(200).send({seller,sellerProducts});
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send('Seller info not found');
+    }
+});

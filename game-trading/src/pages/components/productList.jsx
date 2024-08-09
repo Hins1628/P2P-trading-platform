@@ -81,7 +81,7 @@ function ProductCard({ product, customOption }) {
                 const data = await response.json();
                 setSellerIcon(data.icon);
                 return data.icon;
-                
+
             } else {
                 console.log('Seller icon not found');
             }
@@ -92,24 +92,26 @@ function ProductCard({ product, customOption }) {
 
     useEffect(() => {
         getSellerIconPath();
-    }, []); 
-    
+    }, []);
+
     return (
         <div className={`w-full mb-10 px-4`}>
             <div className="border border-gray-200 rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-2xl">
-                <Link to={`/Product/${product.productId}`}>
-                    <div className="flex items-center p-4 bg-gray-100 hover:bg-gray-200">
+                <Link to={`/UserDetail/${product.sellerId}`}>
+                    <div className="flex items-center p-4 bg-gray-100 hover:bg-gray-200 ">
                         <img src={`http://localhost:5000/uploads/${sellerIcon}`} className="h-10 w-10 rounded-full mr-3" alt="Seller Icon" />
                         <div>
                             <div className="text-lg font-semibold text-gray-900">{product.sellerName}</div>
                             <div className="text-sm text-gray-500">{moment(product.time).fromNow()}</div>
                         </div>
                     </div>
+                </Link>
+                <Link to={`/Product/${product.productId}`}>
                     <div className="flex items-center justify-center h-48 bg-gray-300">
                         <img className="object-cover h-full w-full" src={`http://localhost:5000/uploads/${product.images}`} alt={product.name} />
                     </div>
                     <div className="p-4">
-                        <div className='flex flex-row space-x-2'>
+                        <div className='flex flex-row space-x-2 items-center'>
                             <div className="text-lg font-semibold text-gray-900 mb-2">{product.name}</div>
                             <div className="text-sm text-gray-500 mb-2">Views: {product.views}</div>
                         </div>

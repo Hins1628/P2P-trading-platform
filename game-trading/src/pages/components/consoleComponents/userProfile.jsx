@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import UserProducts from './userProducts';
 
 function UserProfile() {
     const [isEditing, setIsEditing] = useState(false);
@@ -37,7 +38,7 @@ function UserProfile() {
         }
         setUser({
             ...user,
-            icon: file 
+            icon: file
         });
     };
 
@@ -58,7 +59,7 @@ function UserProfile() {
                 console.log('User info updated');
                 fetchUserData();
             } else {
-                console.log('User info not updated',user);
+                console.log('User info not updated', user);
 
             }
         } catch (error) {
@@ -89,38 +90,96 @@ function UserProfile() {
         fetchUserData();
     }, []);
 
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState('');
+
+    const handleAddComment = () => {
+        setComments([...comments, newComment]);
+        setNewComment('');
+    };
+
     return (
-        <div className="">
-            <h1 className="text-2xl">User Profile</h1>
-            <div className="p-5 bg-gray-400 rounded-md space-y-5">
-                <h2 className="text-xl">User Information</h2>
-                {isEditing ? (
-                    <>
-                        <div className='flex flex-col space-y-5'>
+        <div className="max-w-4xl mx-auto p-5">
+            <h1 className="text-3xl font-bold mb-5">User Profile</h1>
+            <div className="bg-white shadow-md rounded-lg p-6 space-y-6">
+                <div className="flex flex-row items-center space-x-4 justify-between">
+                    <div className='flex flex-row space-x-5'>
+                        <img className="h-20 w-20 rounded-full" src={`http://localhost:5000/uploads/${user.icon}`} alt="User Icon" />
+                        <div>
+                            <h2 className="text-2xl font-semibold">{user.name}</h2>
+                            <div className="flex items-center space-x-2">
+                                <span className="text-yellow-500">★★★★☆</span> {/* Placeholder for user rating */}
+                                <span className="text-gray-600">(4.0)</span> {/* Placeholder for rating value */}
+                            </div>
+                            <div className="text-gray-500">{user.email}</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="space-y-4">
+                    <div className="flex flex-row justify-between items-center">
+                        <h3 className="text-xl font-semibold">User Information</h3>
+                        {isEditing ? (
+                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => setIsEditing(false)}>Cancel</button>
+                        ) : (
+                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setIsEditing(true)}>Edit</button>
+                        )}
+                    </div>
+                    {isEditing ? (
+                        <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Upload the product Image:</label>
+                                <label className="block text-sm font-medium text-gray-700">Upload Profile Image:</label>
                                 <input className="mt-1 block w-full border-gray-300 rounded-md" name="icon" type="file" onChange={handleImageChange} />
                             </div>
-                            <input name="name" className="rounded" type="text" value={user.name} onChange={handleInputChange} />
-                            <input name="email" type="text" value={user.email} onChange={handleInputChange} />
-                            <input name="phone" type="text" value={user.phone} onChange={handleInputChange} />
-                            <input name="description" type="text" value={user.description} onChange={handleInputChange} />
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleUserSave()}>Save</button>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Name:</label>
+                                <input name="name" className="mt-1 block w-full border-gray-300 rounded-md p-2" type="text" value={user.name} onChange={handleInputChange} />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Email:</label>
+                                <input name="email" className="mt-1 block w-full border-gray-300 rounded-md p-2" type="text" value={user.email} onChange={handleInputChange} />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Phone:</label>
+                                <input name="phone" className="mt-1 block w-full border-gray-300 rounded-md p-2" type="text" value={user.phone} onChange={handleInputChange} />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Description:</label>
+                                <input name="description" className="mt-1 block w-full border-gray-300 rounded-md p-2" type="text" value={user.description} onChange={handleInputChange} />
+                            </div>
+                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={handleUserSave}>Save</button>
                         </div>
-                    </>
-                ) : (
-                    <>
-
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setIsEditing(true)}>Edit</button>
-                        <img className="h-10 w-10 rounded-full mr-3" src={`http://localhost:5000/uploads/${user.icon}`} alt="Seller Icon" />
-                        <ul className="space-y-5">
-                            <li>Username: {user.name}</li>
-                            <li>Email: {user.email}</li>
-                            <li>Phone: {user.phone}</li>
-                            <li>Description: {user.description}</li>
-                        </ul>
-                    </>
-                )}
+                    ) : (
+                        <div className="space-y-2">
+                            <ul className="space-y-2">
+                                <li><strong>Username:</strong> {user.name}</li>
+                                <li><strong>Email:</strong> {user.email}</li>
+                                <li><strong>Phone:</strong> {user.phone}</li>
+                                <li><strong>Description:</strong> {user.description}</li>
+                            </ul>
+                        </div>
+                    )}
+                </div>
+                <UserProducts />
+                <div className="space-y-4">
+                    <h3 className="text-xl font-semibold">Comments</h3>
+                    <div className="space-y-2">
+                        {comments.map((comment, index) => (
+                            <div key={index} className="bg-gray-100 p-3 rounded-md">
+                                {comment}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex space-x-2">
+                        <input
+                            className="block w-full border-gray-300 rounded-md p-2"
+                            type="text"
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="Add a comment"
+                        />
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleAddComment}>Add</button>
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -1,3 +1,4 @@
+import { set } from 'mongoose';
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -136,6 +137,7 @@ function Navbar() {
         console.log('Register email:', registerEmail);
         console.log('Register password:', registerPassword);
         console.log('Register success');
+        setIsLogin(true);
       } else {
         console.log('Register failed');
       }
@@ -265,6 +267,7 @@ function Navbar() {
                 <form className="space-y-4" onSubmit={(event) => {
                   event.preventDefault();
                   handleRegister();
+                  
                 }}>
                   <div>
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Name</label>

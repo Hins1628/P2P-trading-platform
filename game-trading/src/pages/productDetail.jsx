@@ -9,6 +9,24 @@ import Footer from './components/footer'
 function ProductDetail() {
     const { productId } = useParams();
     const [product, setProduct] = useState({});
+    const [sellerIcon, setSellerIcon] = useState('');
+
+
+    const [mainImage, setMainImage] = useState("https://via.placeholder.com/300");
+    const images = [
+        "https://via.placeholder.com/150",
+        "https://via.placeholder.com/50",
+        "https://via.placeholder.com/50",
+        "https://via.placeholder.com/50"
+    ];
+    const productName = "Product 1"
+    const briefDescription = "This is a brief description of Product 1."
+    const rating = 4.5
+    const views = 132
+    const originalPrice = "$199.99"
+    const currentPrice = "$99.99"
+    const discount = "50%"
+    const details = "These are the details of Product 1."
 
     const fetchProduct = async () => {
         try {
@@ -47,23 +65,29 @@ function ProductDetail() {
     useEffect(() => {
         fetchProduct();
         updateProductViews();
+        getSellerIconPath();
     }, []);
 
-    const [mainImage, setMainImage] = useState("https://via.placeholder.com/300");
-    const images = [
-        "https://via.placeholder.com/150",
-        "https://via.placeholder.com/50",
-        "https://via.placeholder.com/50",
-        "https://via.placeholder.com/50"
-    ];
-    const productName = "Product 1"
-    const briefDescription = "This is a brief description of Product 1."
-    const rating = 4.5
-    const views = 132
-    const originalPrice = "$199.99"
-    const currentPrice = "$99.99"
-    const discount = "50%"
-    const details = "These are the details of Product 1."
+  
+    const getSellerIconPath = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/get-seller-icon/${product.sellerId}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setSellerIcon(data.icon);
+                return data.icon;
+
+            } else {
+                console.log('Seller icon not found');
+                console.log(response, product.sellerId);
+            }
+        } catch (error) {
+            console.error('Seller icon error:', error);
+        }
+    }
 
     return (
         <div>
@@ -98,9 +122,10 @@ function ProductDetail() {
                         </p>
                         <hr className="my-4" />
                         <div className='space-y-5'>
+                            <Link to={`/UserDetail/${product.sellerId}`}>   
                             <div className='flex flex-row space-x-1'>
                                 <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button">
-                                    <img className="w-8 h-8 rounded-full" src="https://via.placeholder.com/200" alt="Guest user photo" />
+                                    <img className="w-8 h-8 rounded-full" src={`http://localhost:5000/uploads/${sellerIcon}`} alt="Guest user photo" />
                                 </button>
                                 <div>{product.sellerName}</div>
                             </div>
@@ -112,6 +137,7 @@ function ProductDetail() {
                                 <span className="w-1 h-1 mx-1.5 bg-gray-500 rounded-full "></span>
                                 <a href="#" className="text-sm font-medium text-gray-900 underline hover:no-underline">73 reviews</a>
                             </div>
+                            </Link>
 
                             <div className='flex space-x-5'>
                                 <button className="bg-blue-400 text-white px-4 py-2 rounded hover:bg-blue-600">Contact Seller</button>
