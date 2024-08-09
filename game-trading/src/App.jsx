@@ -10,6 +10,9 @@ import ProductDetail from './pages/productDetail'
 import UserConsole from './pages/userConsole'
 import UserDetail from './pages/userDetail'
 import Search from './pages/search'
+import Navbar from './pages/components/navBar'
+
+import ChatApp from './pages/components/chatApp'
 
 function App() {
 
@@ -23,6 +26,7 @@ function App() {
         <Route path="/UserDetail/:userId" element={<UserDetail />} />
         <Route path="/Search" element={<Search />} />
       </Routes>
+      
     </Router>
   )
 }

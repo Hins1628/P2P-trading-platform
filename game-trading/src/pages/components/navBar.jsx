@@ -1,6 +1,7 @@
 import { set } from 'mongoose';
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import ChatApp from './chatApp';
 
 function Navbar() {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
@@ -14,6 +15,12 @@ function Navbar() {
   const [registerPassword, setRegisterPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [registerSuccess, setRegisterSuccess] = useState(false);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; // Minimum 8 characters, at least one letter and one number
 
   useEffect(() => {
     const checkWindowSize = () => {
@@ -23,11 +30,26 @@ function Navbar() {
     };
 
     window.addEventListener('resize', checkWindowSize);
+    checkAuth();
+    getUserInfo();
 
     return () => {
       window.removeEventListener('resize', checkWindowSize);
     };
+
   }, []);
+
+
+  useEffect(() => {
+    setRegisterName('');
+    setRegisterEmail('');
+    setRegisterPassword('');
+    setEmailError('');
+    setPasswordError('');
+    if (!isLogin) {
+      setRegisterSuccess(false);
+    }
+  }, [isLogin]);
 
   const handleLogin = async () => {
     try {
@@ -84,6 +106,7 @@ function Navbar() {
       if (response.ok) {
         const data = await response.json();
         console.log('User is authenticated:', data);
+        setIsAuthenticated(true);
         setIsLoggedIn(true);
         setUser({ id: data.userId });
       } else {
@@ -114,37 +137,58 @@ function Navbar() {
     }
   };
 
-  useEffect(() => {
-    checkAuth();
-    getUserInfo();
-  }, []);
+
+
 
   const handleRegister = async () => {
-    console.log('Register email:', registerName);
-    try {
-      const response = await fetch('http://localhost:5000/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: registerName,
-          email: registerEmail,
-          password: registerPassword
-        })
-      });
-      if (response.ok) {
-        console.log('Register email:', registerEmail);
-        console.log('Register password:', registerPassword);
-        console.log('Register success');
-        setIsLogin(true);
-      } else {
-        console.log('Register failed');
-      }
-    } catch (error) {
-      console.error('Register error:', error);
-    };
+    let valid = true;
+
+    if (!emailRegex.test(registerEmail)) {
+      setEmailError('Invalid email format');
+      valid = false;
+    } else {
+      setEmailError('');
+    }
+
+    if (!passwordRegex.test(registerPassword)) {
+      setPasswordError('Password must be at least 8 characters long and contain at least one letter and one number');
+      valid = false;
+    } else {
+      setPasswordError('');
+    }
+
+    if (valid) {
+      console.log('Register email:', registerName);
+      try {
+        const response = await fetch('http://localhost:5000/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: registerName,
+            email: registerEmail,
+            password: registerPassword
+          })
+        });
+        if (response.ok) {
+          console.log('Register email:', registerEmail);
+          console.log('Register password:', registerPassword);
+          console.log('Register success');
+
+          setIsLogin(true);
+          setRegisterSuccess(true);
+        } else {
+          console.log('Register failed');
+        }
+      } catch (error) {
+        console.error('Register error:', error);
+      };
+    }
   }
+
+
+
 
   return (
     <>
@@ -238,6 +282,7 @@ function Navbar() {
                   handleLogin();
                 }}>
                   <div>
+                    {registerSuccess && <p className="text-green-500 text-sm justify-center">Your account had been created</p>}
                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
                     <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@gmail.com" value={loginEmail} required onChange={event => setLoginEmail(event.target.value)} />
                   </div>
@@ -267,19 +312,21 @@ function Navbar() {
                 <form className="space-y-4" onSubmit={(event) => {
                   event.preventDefault();
                   handleRegister();
-                  
+
                 }}>
                   <div>
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Name</label>
-                    <input type="userName" name="userName" id="userName" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Your Name" value={registerName} required onChange={event => setRegisterName(event.target.value)} />
+                    <input type="text" name="userName" id="userName" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Your Name" value={registerName} required onChange={event => setRegisterName(event.target.value)} />
                   </div>
                   <div>
                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Register Email</label>
-                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@gmail.com" value={registerEmail} required onChange={event => setRegisterEmail(event.target.value)} />
+                    <input type="email" name="email" id="email" className={`bg-gray-50 border ${emailError ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white`} placeholder="name@gmail.com" value={registerEmail} required onChange={event => setRegisterEmail(event.target.value)} />
+                    {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
                   </div>
                   <div>
                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Register Password</label>
-                    <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" value={registerPassword} required onChange={event => setRegisterPassword(event.target.value)} />
+                    <input type="password" name="password" id="password" placeholder="••••••••" className={`bg-gray-50 border ${passwordError ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white`} value={registerPassword} required onChange={event => setRegisterPassword(event.target.value)} />
+                    {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
                   </div>
                   <div className="flex justify-between">
                     <div className="flex items-start">
@@ -302,7 +349,7 @@ function Navbar() {
           </div>
         </div>
       </div>
-
+      {isAuthenticated ? <ChatApp loggedInUser={user} /> : null}
     </>
   );
 }

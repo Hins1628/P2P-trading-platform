@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { useState, useEffect } from 'react';
 import { set } from 'mongoose';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 
 function ProductCard({ product, customOption }) {
@@ -86,7 +88,7 @@ function ProductCard({ product, customOption }) {
                 console.log('Seller icon not found');
             }
         } catch (error) {
-            console.error('Seller icon error:', error);
+            console.error('Seller icon error:');
         }
     }
 
@@ -113,7 +115,7 @@ function ProductCard({ product, customOption }) {
                     <div className="p-4">
                         <div className='flex flex-row space-x-2 items-center'>
                             <div className="text-lg font-semibold text-gray-900 mb-2">{product.name}</div>
-                            <div className="text-sm text-gray-500 mb-2">Views: {product.views}</div>
+                            <div className="text-sm text-gray-500 mb-2"><FontAwesomeIcon icon={faEye} /> {product.views}</div>
                         </div>
                         <div className="text-xl font-bold text-orange-500 mb-2">${product.price}</div>
                         <div className="text-sm text-gray-500">{product.productStatus}</div>

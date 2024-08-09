@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom'
 import '../App.css'
 import Navbar from './components/navBar'
 import Footer from './components/footer'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+
 
 
 function ProductDetail() {
@@ -68,7 +71,7 @@ function ProductDetail() {
         getSellerIconPath();
     }, []);
 
-  
+
     const getSellerIconPath = async () => {
         try {
             const response = await fetch(`http://localhost:5000/get-seller-icon/${product.sellerId}`, {
@@ -114,29 +117,29 @@ function ProductDetail() {
                     <div className="flex-grow space-y-5">
                         <h1 className="text-4xl font-extrabold mb-4">{product.name}</h1>
                         <p className="text-gray-500 mb-2 text-sm">{product.productStatus}</p>
-                        <p className='text-gray-500'>Views: {product.views}</p>
+                        <p className='text-gray-500'><FontAwesomeIcon icon={faEye} /> {product.views}</p>
                         <p className="text-lg font-semibold mb-4">
-                            <span className="text-gray-500 line-through mr-2">{product.price}</span>
+                            <span className="text-gray-500 line-through mr-2">${product.price}</span>
                             <span className="text-red-500">{currentPrice}</span>
                             <span className="text-green-500 ml-2">-{discount}</span>
                         </p>
                         <hr className="my-4" />
                         <div className='space-y-5'>
-                            <Link to={`/UserDetail/${product.sellerId}`}>   
-                            <div className='flex flex-row space-x-1'>
-                                <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button">
-                                    <img className="w-8 h-8 rounded-full" src={`http://localhost:5000/uploads/${sellerIcon}`} alt="Guest user photo" />
-                                </button>
-                                <div>{product.sellerName}</div>
-                            </div>
-                            <div className="flex items-center">
-                                <svg className="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                </svg>
-                                <p className="ms-2 text-sm font-bold text-gray-900 ">{rating}</p>
-                                <span className="w-1 h-1 mx-1.5 bg-gray-500 rounded-full "></span>
-                                <a href="#" className="text-sm font-medium text-gray-900 underline hover:no-underline">73 reviews</a>
-                            </div>
+                            <Link to={`/UserDetail/${product.sellerId}`}>
+                                <div className='flex flex-row space-x-1'>
+                                    <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button">
+                                        <img className="w-8 h-8 rounded-full" src={`http://localhost:5000/uploads/${sellerIcon}`} alt="Guest user photo" />
+                                    </button>
+                                    <div>{product.sellerName}</div>
+                                </div>
+                                <div className="flex items-center">
+                                    <svg className="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                                    </svg>
+                                    <p className="ms-2 text-sm font-bold text-gray-900 ">{rating}</p>
+                                    <span className="w-1 h-1 mx-1.5 bg-gray-500 rounded-full "></span>
+                                    <a href="#" className="text-sm font-medium text-gray-900 underline hover:no-underline">73 reviews</a>
+                                </div>
                             </Link>
 
                             <div className='flex space-x-5'>

@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const multer = require('multer');
 
 require('dotenv').config();
+require('./websocketServer');
 
 const app = express();
 const cors = require('cors');
@@ -48,8 +49,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+
 })
 
 const userSchema = new mongoose.Schema({
@@ -73,7 +73,7 @@ const ProductSchema = new mongoose.Schema({
     description: { type: String, default: '' },
     sellerId: { type: String, required: true },
     sellerName: { type: String, required: true },
-    images: { type: [String], validate: [imgLimit, '{PATH} exceeds the limit of 4'] },
+    images: { type: [String], default: ['2024-08-09T09-18-05.557Zpixai-1754766906462055083-1.png'],validate: [imgLimit, '{PATH} exceeds the limit of 4'] },
     time: { type: Date, default: Date.now },
     views: { type: Number, default: 0 },
     productType: { type: String, default: '', required: true }
@@ -335,7 +335,8 @@ app.get('/get-seller-icon/:sellerId', async (req, res) => {
     const sellerId = req.params.sellerId;
     try {
         const user = await User.findOne({ userId: sellerId });
-        console.log(user.icon,"icon");
+
+        //console.log(user.icon,"icon");
         res.status(200).send(user);
 
     } catch (err) {

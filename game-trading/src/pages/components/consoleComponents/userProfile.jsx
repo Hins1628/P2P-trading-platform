@@ -1,9 +1,20 @@
 import { useState, useEffect } from 'react';
 import UserProducts from './userProducts';
+import { set } from 'mongoose';
 
 function UserProfile() {
     const [isEditing, setIsEditing] = useState(false);
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState('');
+    const [imagePreview, setImagePreview] = useState(null);
     const [user, setUser] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        description: '',
+        icon: []
+    });
+    const [editUser, setEditUser] = useState({
         name: '',
         email: '',
         phone: '',
@@ -12,8 +23,8 @@ function UserProfile() {
     });
 
     const handleInputChange = (e) => {
-        setUser({
-            ...user,
+        setEditUser({
+            ...editUser,
             [e.target.name]: e.target.value
         });
     };
@@ -21,7 +32,13 @@ function UserProfile() {
     const handleImageChange = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
-
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
         // Validate file type
         const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
         if (!validTypes.includes(file.type)) {
@@ -36,20 +53,24 @@ function UserProfile() {
             alert('File is too large:' + file.name);
             return;
         }
-        setUser({
-            ...user,
+        setEditUser({
+            ...editUser,
             icon: file
         });
     };
 
+    useEffect(() => {
+        setEditUser(user);
+    }, [isEditing]);
+
     const handleUserSave = async () => {
         try {
             const formData = new FormData();
-            formData.append('name', user.name);
-            formData.append('email', user.email);
-            formData.append('phone', user.phone);
-            formData.append('description', user.description);
-            formData.append('icon', user.icon);
+            formData.append('name', editUser.name);
+            formData.append('email', editUser.email);
+            formData.append('phone', editUser.phone);
+            formData.append('description', editUser.description);
+            formData.append('icon', editUser.icon);
             const response = await fetch('http://localhost:5000/update-user-info', {
                 method: 'POST',
                 credentials: 'include',
@@ -58,14 +79,14 @@ function UserProfile() {
             if (response.ok) {
                 console.log('User info updated');
                 fetchUserData();
+                setIsEditing(false);
             } else {
-                console.log('User info not updated', user);
-
+                console.log('User info not updated', editUser);
             }
         } catch (error) {
             console.error('User info update error:', error);
         }
-        setIsEditing(false);
+
     }
 
     const fetchUserData = async () => {
@@ -78,6 +99,7 @@ function UserProfile() {
                 const data = await response.json();
                 console.log('User info:', data, user);
                 setUser(data);
+                setEditUser(data);
             } else {
                 console.log('User info not found');
             }
@@ -89,9 +111,6 @@ function UserProfile() {
     useEffect(() => {
         fetchUserData();
     }, []);
-
-    const [comments, setComments] = useState([]);
-    const [newComment, setNewComment] = useState('');
 
     const handleAddComment = () => {
         setComments([...comments, newComment]);
@@ -129,22 +148,27 @@ function UserProfile() {
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Upload Profile Image:</label>
                                 <input className="mt-1 block w-full border-gray-300 rounded-md" name="icon" type="file" onChange={handleImageChange} />
+                                {imagePreview && (
+                                    <div className="mt-2">
+                                        <img src={imagePreview} alt="Profile Preview" className="h-20 w-20 rounded-full" />
+                                    </div>
+                                )}
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Name:</label>
-                                <input name="name" className="mt-1 block w-full border-gray-300 rounded-md p-2" type="text" value={user.name} onChange={handleInputChange} />
+                                <input name="name" className="mt-1 block w-full border-gray-300 rounded-md p-2" type="text" value={editUser.name} onChange={handleInputChange} />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Email:</label>
-                                <input name="email" className="mt-1 block w-full border-gray-300 rounded-md p-2" type="text" value={user.email} onChange={handleInputChange} />
+                                <input name="email" className="mt-1 block w-full border-gray-300 rounded-md p-2" type="text" value={editUser.email} onChange={handleInputChange} />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Phone:</label>
-                                <input name="phone" className="mt-1 block w-full border-gray-300 rounded-md p-2" type="text" value={user.phone} onChange={handleInputChange} />
+                                <input name="phone" className="mt-1 block w-full border-gray-300 rounded-md p-2" type="text" value={editUser.phone} onChange={handleInputChange} />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Description:</label>
-                                <input name="description" className="mt-1 block w-full border-gray-300 rounded-md p-2" type="text" value={user.description} onChange={handleInputChange} />
+                                <input name="description" className="mt-1 block w-full border-gray-300 rounded-md p-2" type="text" value={editUser.description} onChange={handleInputChange} />
                             </div>
                             <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={handleUserSave}>Save</button>
                         </div>
